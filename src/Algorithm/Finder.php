@@ -6,60 +6,79 @@ namespace CodelyTV\FinderKata\Algorithm;
 
 final class Finder
 {
-    /** @var Thing[] */
-    private $_p;
+    /** @var Player[] */
+    private $playerList;
 
-    public function __construct(array $p)
+    public function __construct(array $list)
     {
-        $this->_p = $p;
+        $this->playerList = $list;
     }
 
-    public function find(int $ft): F
+    public function find(int $fightType): Fight
     {
-        /** @var F[] $tr */
-        $tr = [];
+        if (count($this->playerList) < 2) {
+            return new Fight();
+        }
 
-        for ($i = 0; $i < count($this->_p); $i++) {
-            for ($j = $i + 1; $j < count($this->_p); $j++) {
-                $r = new F();
+        $fightList = $this->createAllFightsCombinations();
 
-                if ($this->_p[$i]->birthDate < $this->_p[$j]->birthDate) {
-                    $r->p1 = $this->_p[$i];
-                    $r->p2 = $this->_p[$j];
+        return $this->renderFightByType($fightType, $fightList);
+    }
+
+    /**
+     * @return Fight[]
+     */
+    private function createAllFightsCombinations()
+    {
+        /** @var Fight[] $fightList */
+        $fightList = [];
+
+        for ($i = 0; $i < count($this->playerList); $i++) {
+            for ($j = $i + 1; $j < count($this->playerList); $j++) {
+                $fight = new Fight();
+
+                if ($this->playerList[$i]->birthDate < $this->playerList[$j]->birthDate) {
+                    $fight->player1 = $this->playerList[$i];
+                    $fight->player2 = $this->playerList[$j];
                 } else {
-                    $r->p1 = $this->_p[$j];
-                    $r->p2 = $this->_p[$i];
+                    $fight->player1 = $this->playerList[$j];
+                    $fight->player2 = $this->playerList[$i];
                 }
 
-                $r->d = $r->p2->birthDate->getTimestamp()
-                    - $r->p1->birthDate->getTimestamp();
+                $fight->ageDifference = $fight->player2->birthDate->getTimestamp()
+                    - $fight->player1->birthDate->getTimestamp();
 
-                $tr[] = $r;
+                $fightList[] = $fight;
             }
         }
+        return $fightList;
+    }
 
-        if (count($tr) < 1) {
-            return new F();
-        }
+    /**
+     * @param int $fightType
+     * @param $fightList
+     * @return mixed
+     */
+    private function renderFightByType(int $fightType, $fightList)
+    {
+        $selectedFight = $fightList[0];
 
-        $answer = $tr[0];
-
-        foreach ($tr as $result) {
-            switch ($ft) {
-                case FT::ONE:
-                    if ($result->d < $answer->d) {
-                        $answer = $result;
+        foreach ($fightList as $currentFight) {
+            switch ($fightType) {
+                case FightType::MIN_AGE_DIFF:
+                    if ($currentFight->ageDifference < $selectedFight->ageDifference) {
+                        $selectedFight = $currentFight;
                     }
                     break;
 
-                case FT::TWO:
-                    if ($result->d > $answer->d) {
-                        $answer = $result;
+                case FightType::MAX_AGE_DIFF:
+                    if ($currentFight->ageDifference > $selectedFight->ageDifference) {
+                        $selectedFight = $currentFight;
                     }
                     break;
             }
         }
 
-        return $answer;
+        return $selectedFight;
     }
 }
