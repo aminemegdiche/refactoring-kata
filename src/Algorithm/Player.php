@@ -6,31 +6,26 @@ namespace CodelyTV\FinderKata\Algorithm;
 
 use DateTime;
 
-final class Player
-{
-    /** @var string */
-    public $name;
+final class Player {
+  /** @var string */
+  public $name;
 
-    /** @var DateTime */
-    public $birthDate;
+  /** @var DateTime */
+  public $birthDate;
 
-    public function getName(): string
-    {
-        return $this->name;
-    }
+  public function getName(): string {
+    return $this->name;
+  }
 
-    public function setName(string $name)
-    {
-        $this->name = $name;
-    }
+  public function setName(string $name) {
+    $this->name = $name;
+  }
 
-    public function getBirthDate(): DateTime
-    {
-        return $this->birthDate;
-    }
+  public function getBirthDate(): DateTime {
+    return $this->birthDate;
+  }
 
-    public function setBirthDate(DateTime $birthDate)
-    {
-        $this->birthDate = $birthDate;
-    }
+  public function setBirthDate(DateTime $birthDate) {
+    $this->birthDate = $birthDate;
+  }
 }

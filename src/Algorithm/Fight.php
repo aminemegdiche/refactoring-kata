@@ -4,14 +4,13 @@ declare(strict_types = 1);
 
 namespace CodelyTV\FinderKata\Algorithm;
 
-final class Fight
-{
-    /** @var Player */
-    public $player1;
+final class Fight {
+  /** @var Player */
+  public $player1;
 
-    /** @var Player */
-    public $player2;
+  /** @var Player */
+  public $player2;
 
-    /** @var int */
-    public $ageDifference;
+  /** @var int */
+  public $ageDifference;
 }
